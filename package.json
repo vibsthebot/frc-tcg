@@ -20,7 +20,7 @@
     "react-native-linear-gradient": "^2.8.3",
     "react-native-reanimated": "~3.17.4",
     "react-native-safe-area-context": "5.4.0"
-  },
+    },
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@types/react": "~19.0.10",

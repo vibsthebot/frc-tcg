@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { TextInput, View, Text, ActivityIndicator, Image} from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 import './global.css';
 
-export default function TeamColorPicker() {
+export default function CardGeneration() {
   const [teamNumber, setTeamNumber] = useState('');
   const [teamData, setTeamData] = useState<{name: string; rookie_year: string; state_prov: string; country: string} | null>(null);
   const [colors, setColors] = useState<{ primary: string; secondary: string } | null>(null);
@@ -77,29 +76,44 @@ export default function TeamColorPicker() {
         {error && <Text className="text-red-600 mb-4 text-center">{error}</Text>}
 
         {colors && (
-          
-          <View className="bg-white rounded-2xl p-4 m-4 shadow-md w-72 h-96" style={{ backgroundColor: colors.primary, borderColor: colors.secondary, borderWidth: 8 }}>
-            <View className="flex-row justify-between items-center mb-2">
-                <Text 
-                className="text-base font-bold flex-1 mr-2" 
-                style={{color: colors.secondary}}
-                >
-                {teamData?.name}
-              </Text>
+          <View className="bg-white rounded-2xl p-6 m-4 shadow-lg w-80 h-[425px]" style={{ backgroundColor: colors.primary, borderColor: colors.secondary, borderWidth: 8 }}>
+            <View className="flex-row justify-between items-center mb-4">
               <Text 
-                className="text-sm font-semibold" 
-                style={{color: colors.secondary}}
+          className="text-lg font-bold flex-1 mr-2" 
+          style={{color: colors.secondary}}
               >
-                Team {teamNumber}
+          {teamData?.name}
               </Text>
+              <View className="bg-yellow-400 px-3 py-1 rounded-full">
+          <Text className="text-sm font-bold text-black">
+            #{teamNumber}
+          </Text>
+              </View>
             </View>
-            <Image
-              source={{uri: `https://www.thebluealliance.com/avatar/2025/frc${teamNumber}.png`}}
-              className="w-32 h-32 self-center mb-3"
-              resizeMode="contain"
-            />
-            <Text className="text-base text-gray-700" style={{color: colors.secondary}}>HP: {teamNumber}</Text>
-            <Text className="text-base text-gray-700" style={{color: colors.secondary}}>Rookie Year: {teamData?.rookie_year}</Text>
+            
+            <View className="bg-white rounded-xl p-4 mb-4 shadow-sm">
+              <Image
+                source={{uri: `https://www.thebluealliance.com/avatar/2025/frc${teamNumber}.png`}}
+                className="w-40 h-40 self-center"
+                resizeMode="contain"
+              />
+            </View>
+            
+            <View className=" bg-opacity-10 rounded-xl p-4 mb-4">
+              <Text className="text-lg font-bold mb-2" style={{color: colors.secondary}}>Team Stats</Text>
+              <View className="flex-row justify-between mb-2">
+                <Text className="text-base font-semibold" style={{color: colors.secondary}}>Power Level:</Text>
+                <Text className="text-base font-bold" style={{color: colors.secondary}}>{teamNumber}</Text>
+              </View>
+              <View className="flex-row justify-between mb-2">
+                <Text className="text-base font-semibold" style={{color: colors.secondary}}>Rookie Year:</Text>
+                <Text className="text-base font-bold" style={{color: colors.secondary}}>{teamData?.rookie_year}</Text>
+              </View>
+              <View className="flex-row justify-between">
+                <Text className="text-base font-semibold" style={{color: colors.secondary}}>Region:</Text>
+                <Text className="text-base font-bold" style={{color: colors.secondary}}>{teamData?.state_prov}, {teamData?.country}</Text>
+              </View>
+            </View>
           </View>
         )}
       </View>
