@@ -20,8 +20,11 @@ export default function TeamCard({ teamNumber }: TeamCardProps) {
   const [colors, setColors] = useState<{ primary: string; secondary: string } | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [imageError, setImageError] = useState(false);
 
   useEffect(() => {
+    setImageError(false);
+
     if (!teamNumber) {
       setColors(null);
       setError(null);
@@ -35,13 +38,14 @@ export default function TeamCard({ teamNumber }: TeamCardProps) {
         const response = await fetch(`https://api.frc-colors.com/v1/team/${teamNumber}`);
         if (!response.ok) throw new Error('Team not found');
         const data = await response.json();
+
         setColors({
           primary: data.primaryHex || '#CCCCCC',
-          secondary: data.secondaryHex || '#777777',
+          secondary: data.secondaryHex || '#FFFFFF',
         });
       } catch (e) {
-        setColors(null);
-        setError('Failed to load team');
+        setColors({primary: '#CCCCCC', secondary: '#777777'});
+        console.log('Error fetching team colors:', e);
       } finally {
         setLoading(false);
       }
@@ -86,9 +90,16 @@ export default function TeamCard({ teamNumber }: TeamCardProps) {
       
       <View className="bg-white rounded-xl p-4 mb-4 shadow-sm">
         <Image
-          source={{uri: `https://www.thebluealliance.com/avatar/2025/frc${teamNumber}.png`}}
+          source={{
+            uri: imageError 
+              ? 'https://upload.wikimedia.org/wikipedia/en/thumb/a/a2/FIRST_Logo.svg/1200px-FIRST_Logo.svg.png'
+              : `https://www.thebluealliance.com/avatar/2025/frc${teamNumber}.png`
+          }}
           className="w-40 h-40 self-center"
           resizeMode="contain"
+          onError={() => {setImageError(true); 
+                          console.log('Image load error for team', teamNumber);
+                        }}
         />
       </View>
       

@@ -1,5 +1,5 @@
 {
-  "name": "my-expo-app",
+  "name": "frc-tcg",
   "version": "1.0.0",
   "scripts": {
     "android": "expo start --android",
@@ -11,9 +11,14 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "2.1.2",
     "expo": "^53.0.9",
+    "expo-auth-session": "~6.1.5",
+    "expo-constants": "~17.1.6",
     "expo-linear-gradient": "~14.1.4",
+    "expo-router": "^5.0.7",
     "expo-status-bar": "~2.2.3",
+    "firebase": "^11.8.1",
     "nativewind": "latest",
     "react": "19.0.0",
     "react-native": "0.79.2",
@@ -33,6 +38,6 @@
     "tailwindcss": "^3.4.0",
     "typescript": "~5.8.3"
   },
-  "main": "node_modules/expo/AppEntry.js",
+  "main": "expo-router/entry",
   "private": true
 }
