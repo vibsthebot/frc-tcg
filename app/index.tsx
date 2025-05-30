@@ -36,9 +36,14 @@ export default function App() {
     };
 
     return (
-        <View className='bg-sky-600'>
-        {/*<View className='flex-1 items-center bg-sky-500'>
-            <View className="flex-1 justify-center px-6 bg-sky-500">
+        
+        <View className='flex-1 items-center'>
+            {user && (
+            <View className="flex-1 justify-center items-center bg-gray-100 w-full">
+                <Text className="text-2xl font-bold mb-4">Welcome to FRC TCG!</Text>
+                {user && <Text>{user.displayName}</Text>}
+            </View>
+        ) || (<View className="flex-1 justify-center px-6 bg-white">
                 <TextInput
                 className="border border-gray-300 rounded-lg px-4 py-3 mb-4 text-base"
                 placeholder="Email"
@@ -62,10 +67,9 @@ export default function App() {
                         <Text className="text-white text-center font-semibold text-base">Sign Up</Text>
                     </TouchableOpacity>
                 </View>
-            </View>
-            <TeamCard teamNumber="254" />
-        </View>*/}
-            <Text>Hi!</Text>
+            </View>)}
+            
+            
         </View>
     );
 }
