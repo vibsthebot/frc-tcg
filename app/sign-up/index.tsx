@@ -3,7 +3,8 @@ import './../../global.css';
 import { Text, TextInput, View, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import { createUserWithEmailAndPassword, updateProfile, User } from 'firebase/auth';
-import { auth } from 'firebaseConfig';
+import { auth, db } from 'firebaseConfig';
+import { doc, setDoc } from 'firebase/firestore';
 
 export default function SignUpScreen() {
     const [user, setUser] = useState<User | null>(null);
@@ -22,6 +23,17 @@ export default function SignUpScreen() {
                     updateProfile(user, {
                         displayName: displayName
                     });
+                    try {
+                        setDoc(doc(db, "users", user?.uid || ""), {
+                            email: user?.email,
+                            displayName: user?.displayName || "Anonymous",
+                            xp: 0,
+                            cards: [649, 118, 27, 148],
+                            });
+                        console.log("User added successfully!");
+                    } catch (error) {
+                        console.error("Error adding user: ", error);
+                    }
                     router.navigate('/home');
                 })
                 .catch((error) => {
