@@ -5,6 +5,7 @@ import { useRouter } from 'expo-router';
 import { createUserWithEmailAndPassword, updateProfile, User } from 'firebase/auth';
 import { auth, db } from 'firebaseConfig';
 import { doc, setDoc } from 'firebase/firestore';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function SignUpScreen() {
     const [user, setUser] = useState<User | null>(null);
@@ -23,8 +24,13 @@ export default function SignUpScreen() {
                     updateProfile(user, {
                         displayName: displayName
                     });
+                    AsyncStorage.setItem('user', JSON.stringify({
+                        uid: user.uid,
+                        email: user.email,
+                        displayName: user.displayName,
+                    }));
                     try {
-                        setDoc(doc(db, "users", user?.uid || ""), {
+                        setDoc(doc(db, "users", user?.email || ""), {
                             email: user?.email,
                             displayName: user?.displayName || "Anonymous",
                             xp: 0,

@@ -5,11 +5,12 @@ import { useState } from 'react';
 import { auth } from './../firebaseConfig'; 
 import { useRouter } from 'expo-router';
 import { useGlobal } from './../GlobalContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 export default function App() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const { user, setUser } = useGlobal();
-
 
     const router = useRouter();
     const handleSignUp = () => {
@@ -21,6 +22,12 @@ export default function App() {
             .then((userCredential) => {
                 const user = userCredential.user;
                 setUser(user);
+                AsyncStorage.setItem('user', JSON.stringify({
+                    uid: user.uid,
+                    email: user.email,
+                    displayName: user.displayName,
+                }));
+
                 console.log(user.displayName);
                 router.navigate('/home');
             })

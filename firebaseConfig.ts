@@ -2,7 +2,7 @@ import { initializeApp } from 'firebase/app';
 import { FIREBASE_API_KEY } from '@env';
 import { initializeAuth, getAuth } from 'firebase/auth';
 import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
-import { getFirestore } from 'firebase/firestore';
+import { getFirestore, persistentLocalCache } from 'firebase/firestore';
 
 
 const firebaseConfig = {
