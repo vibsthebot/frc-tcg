@@ -7,39 +7,8 @@ import { useState, useEffect } from 'react';
 import TeamCard from 'components/Card';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-type UserData = {
-  email?: string;
-  displayName?: string;
-  xp?: string;
-  cards?: number[];
-};
-
 export default function HomeScreen() {
-    const { user, setUser } = useGlobal();
-    const [userData, setUserData] = useState<UserData | null>(null);
-
-    const getUserData = async () => {
-        if (!user) {
-            const storedUser = await AsyncStorage.getItem('user');
-            if (storedUser) {
-                setUser(JSON.parse(storedUser));
-            }
-        }
-
-        try {
-            const docRef = doc(db, "users", user?.email || "");
-            const docSnap = await getDoc(docRef);
-            
-            if (docSnap.exists()) {
-                setUserData(docSnap.data());
-                console.log("Document data:", docSnap.data());
-            } else {
-                console.log("No such document!");
-            }
-        } catch (error) {
-            console.error("Error getting document: ", error);
-        }
-    };
+    const { user, setUser, userData, setUserData, getUserData} = useGlobal();
 
     useEffect(() => {
         console.log("User in HomeScreen:", user);
@@ -61,7 +30,6 @@ export default function HomeScreen() {
 
             {userData && (
                 <View className="px-6">
-                {/* Stats Card */}
                 <View className="bg-white rounded-2xl p-6 mb-6 shadow-sm border border-gray-100">
                     <Text className="text-lg font-semibold text-gray-800 mb-4">Your Stats</Text>
                     <View className="flex-row justify-between">
@@ -96,12 +64,13 @@ export default function HomeScreen() {
                 {(!userData.cards || userData.cards.length === 0) && (
                     <View className="bg-white rounded-2xl p-8 items-center border border-gray-100">
                     <Text className="text-gray-400 text-lg mb-2">No cards yet</Text>
-                    <Text className="text-gray-500 text-center">Start collecting cards to build your team!</Text>
+                    <Text className="text-gray-500 text-center">Start collecting cards to build your decks!</Text>
                     </View>
                 )}
                 </View>
             )}
             </ScrollView>
+            <></>
         </SafeAreaView>
     );
 }

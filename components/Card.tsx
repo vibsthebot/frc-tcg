@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, ActivityIndicator, Image } from 'react-native';
 import './../global.css';
 import { TBA_API_KEY } from '@env';
+import { Ionicons } from '@expo/vector-icons';
+
 
 
 interface TeamCardProps {
@@ -86,7 +88,7 @@ export default function TeamCard({ teamNumber, width = 320 }: TeamCardProps) {
 
   return (
     <View 
-      className="bg-white rounded-2xl shadow-lg" 
+      className="bg-white rounded-xl shadow-lg" 
       style={{ 
         backgroundColor: colors.primary, 
         borderColor: colors.secondary, 
@@ -170,15 +172,7 @@ export default function TeamCard({ teamNumber, width = 320 }: TeamCardProps) {
           Team Stats:
         </Text>
         <View className="flex-row justify-between" style={{ marginBottom: 8 * scale }}>
-          <Text 
-            className="font-semibold"
-            style={{
-              color: colors.secondary,
-              fontSize: 16 * scale
-            }}
-          >
-            Awards x num awards
-          </Text>
+          <Ionicons name="trophy-outline" size={20 * scale} color={colors.secondary} /> 
           <Text 
             className="font-bold"
             style={{
@@ -186,7 +180,7 @@ export default function TeamCard({ teamNumber, width = 320 }: TeamCardProps) {
               fontSize: 16 * scale
             }}
           >
-            {teamNumber}
+            x {teamNumber}
           </Text>
         </View>
         <View className="flex-row justify-between" style={{ marginBottom: 8 * scale }}>
