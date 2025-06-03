@@ -1,7 +1,7 @@
 import './../global.css';
 import { Text, TextInput, View, TouchableOpacity } from 'react-native'
 import { getAuth, signInWithEmailAndPassword, User, updateProfile} from "firebase/auth";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { auth } from './../firebaseConfig'; 
 import { useRouter } from 'expo-router';
 import { useGlobal } from './../GlobalContext';
@@ -38,34 +38,48 @@ export default function App() {
 
     };
 
+    useEffect(() => {
+        if (user) {
+            router.navigate('/home');
+        } else {
+            AsyncStorage.getItem('user').then((storedUser) => {
+                if (storedUser) {
+                    const parsedUser = JSON.parse(storedUser);
+                    setUser(parsedUser);
+                }
+            });
+        }
+    }, [user]);
+
     return (
-        
-        <View className='flex-1 items-center'>
+
+        <View className='flex-1 items-center bg-catppuccin-base'>
             <View className="flex-1 justify-center items-center">
-                <Text className='text-2xl font-bold'>Welcome to FRC TCG</Text>
-                <Text className='text-lg'>Please sign in or sign up to continue</Text>
+                <Text className='text-4xl font-bold text-catppuccin-text'>FRC <Text className='text-catppuccin-mauve'>TCG</Text></Text>
                 <View className="w-full px-8 mt-8">
                     <TextInput
-                    className="border border-gray-300 rounded-lg px-4 py-3 mb-4 text-base"
+                    className="border border-catppuccin-surface1 bg-catppuccin-mantle rounded-lg px-4 py-3 mb-4 text-base text-catppuccin-text focus:border-catppuccin-blue"
                     placeholder="Email"
+                    placeholderTextColor="#6c6f85"
                     value={email}
                     onChangeText={setEmail}
                     keyboardType="email-address"
                     autoCapitalize="none"
                     />
                     <TextInput
-                    className="border border-gray-300 rounded-lg px-4 py-3 mb-4 text-base"
+                    className="border border-catppuccin-surface1 bg-catppuccin-mantle rounded-lg px-4 py-3 mb-4 text-base text-catppuccin-text focus:border-catppuccin-blue"
                     placeholder="Password"
+                    placeholderTextColor="#6c6f85"
                     value={password}
                     onChangeText={setPassword}
                     secureTextEntry
                     />
                     <View className='flex-row items-center justify-center gap-4 p-5'>
-                        <TouchableOpacity className="bg-blue-500 rounded-lg py-3 px-6" onPress={handleSignIn}>
-                            <Text className="text-white text-center font-semibold text-base">Sign In</Text>
+                        <TouchableOpacity className="bg-catppuccin-blue rounded-lg py-3 px-6 active:bg-catppuccin-sapphire" onPress={handleSignIn}>
+                            <Text className="text-catppuccin-base text-center font-semibold text-base">Sign In</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity className="bg-blue-500 rounded-lg py-3 px-6" onPress={handleSignUp}>
-                            <Text className="text-white text-center font-semibold text-base">Sign Up</Text>
+                        <TouchableOpacity className="bg-catppuccin-green rounded-lg py-3 px-6 active:bg-catppuccin-teal" onPress={handleSignUp}>
+                            <Text className="text-catppuccin-base text-center font-semibold text-base">Sign Up</Text>
                         </TouchableOpacity>
                     </View>
                 </View>

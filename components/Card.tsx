@@ -23,7 +23,7 @@ export default function TeamCard({ teamNumber, width = 320 }: TeamCardProps) {
   const [colors, setColors] = useState<{ primary: string; secondary: string } | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [imageError, setImageError] = useState(false);
+  const [imgUrl, setImgUrl] = useState('');
 
   const scale = width / 320;
   const height = 425 * scale;
@@ -32,7 +32,8 @@ export default function TeamCard({ teamNumber, width = 320 }: TeamCardProps) {
   const margin = 16 * scale;
 
   useEffect(() => {
-    setImageError(false);
+    setImgUrl(`https://www.thebluealliance.com/avatar/2025/frc${teamNumber}.png`);
+
 
     if (!teamNumber) {
       setColors(null);
@@ -88,7 +89,7 @@ export default function TeamCard({ teamNumber, width = 320 }: TeamCardProps) {
 
   return (
     <View 
-      className="bg-white rounded-xl shadow-lg" 
+      className="bg-white shadow-lg" 
       style={{ 
         backgroundColor: colors.primary, 
         borderColor: colors.secondary, 
@@ -96,7 +97,8 @@ export default function TeamCard({ teamNumber, width = 320 }: TeamCardProps) {
         width: width,
         height: height,
         padding: padding,
-        margin: margin
+        margin: margin,
+        borderRadius: 24 * scale,
       }}
     >
       <View className="flex-row justify-between items-center" style={{ marginBottom: 16 * scale }}>
@@ -138,9 +140,7 @@ export default function TeamCard({ teamNumber, width = 320 }: TeamCardProps) {
       >
         <Image
           source={{
-            uri: imageError 
-              ? 'https://upload.wikimedia.org/wikipedia/en/thumb/a/a2/FIRST_Logo.svg/1200px-FIRST_Logo.svg.png'
-              : `https://www.thebluealliance.com/avatar/2025/frc${teamNumber}.png`
+            uri: imgUrl
           }}
           style={{
             width: imageSize,
@@ -148,7 +148,8 @@ export default function TeamCard({ teamNumber, width = 320 }: TeamCardProps) {
             alignSelf: 'center'
           }}
           resizeMode="contain"
-          onError={() => {setImageError(true); 
+          onError={() => {
+            setImgUrl('https://upload.wikimedia.org/wikipedia/en/thumb/a/a2/FIRST_Logo.svg/1200px-FIRST_Logo.svg.png');
                           console.log('Image load error for team', teamNumber);
                         }}
         />
