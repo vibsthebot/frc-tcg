@@ -16,6 +16,7 @@ type GlobalContextType = {
   userData: UserData | null;
   setUserData: (data: UserData | null) => void;
   getUserData: () => Promise<void>;
+  hallOfFame: number[];
 };
 
 export const GlobalContext = createContext<GlobalContextType | undefined>(undefined);
@@ -23,6 +24,7 @@ export const GlobalContext = createContext<GlobalContextType | undefined>(undefi
 export const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [userData, setUserData] = useState<UserData | null>(null);
+  const hallOfFame = [5985, 2486, 321, 1629, 503, 4613, 1816, 1902, 2834, 1311, 2614, 3132, 987, 597, 27, 1538, 1114, 359, 341, 236, 842, 365, 111, 67, 254, 103, 175, 16, 120, 23, 144, 151, 191];
   
   const getUserData = async () => {
     if (!user?.email) return;
@@ -37,7 +39,7 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
     }
   };
   return (
-    <GlobalContext.Provider value={{ user, setUser, userData, setUserData, getUserData }}>
+    <GlobalContext.Provider value={{ user, setUser, userData, setUserData, getUserData, hallOfFame}}>
       {children}
     </GlobalContext.Provider>
   );

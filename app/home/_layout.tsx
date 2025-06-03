@@ -1,10 +1,31 @@
-import { Tabs } from "expo-router";
+import { Tabs, useRouter } from "expo-router";
 import { useColorScheme } from "nativewind";
 import { Ionicons } from '@expo/vector-icons';
+import { useEffect, useState } from "react";
+import { useGlobal } from "GlobalContext";
 
 export default function RootLayout() {
     const { colorScheme } = useColorScheme();
-    
+    const router = useRouter();
+    const { user } = useGlobal();
+    const [isChecking, setIsChecking] = useState(true);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            if (!user) {
+                console.log("User not found, redirecting to login");
+                router.replace('/');
+            }
+            setIsChecking(false);
+        }, 100);
+
+        return () => clearTimeout(timer);
+    }, [user, router]);
+
+    if (isChecking || !user) {
+        return null;
+    }
+
     return (
         <Tabs
             screenOptions={{

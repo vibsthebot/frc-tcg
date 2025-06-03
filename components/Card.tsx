@@ -3,6 +3,7 @@ import { View, Text, ActivityIndicator, Image } from 'react-native';
 import './../global.css';
 import { TBA_API_KEY } from '@env';
 import { Ionicons } from '@expo/vector-icons';
+import { useGlobal } from 'GlobalContext';
 
 
 
@@ -24,6 +25,8 @@ export default function TeamCard({ teamNumber, width = 320 }: TeamCardProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [imgUrl, setImgUrl] = useState('');
+  const [isHallOfFame, setIsHallOfFame] = useState(false);
+  const {hallOfFame} = useGlobal();
 
   const scale = width / 320;
   const height = 425 * scale;
@@ -40,6 +43,9 @@ export default function TeamCard({ teamNumber, width = 320 }: TeamCardProps) {
       setError(null);
       return;
     }
+
+    setIsHallOfFame(hallOfFame.includes(parseInt(teamNumber)));
+    
 
     const fetchColors = async () => {
       setLoading(true);
@@ -91,139 +97,144 @@ export default function TeamCard({ teamNumber, width = 320 }: TeamCardProps) {
     <View 
       className="bg-white shadow-lg" 
       style={{ 
-        backgroundColor: colors.primary, 
-        borderColor: colors.secondary, 
-        borderWidth: 7 * scale,
-        width: width,
-        height: height,
-        padding: padding,
-        margin: margin,
-        borderRadius: 24 * scale,
+      backgroundColor: colors.primary, 
+      borderColor: colors.secondary, 
+      borderWidth: 7 * scale,
+      width: width,
+      height: height,
+      padding: padding,
+      margin: margin,
+      borderRadius: 24 * scale,
+      shadowColor: isHallOfFame ? '#f9e2af' : '#000',
+      shadowOffset: { width: 0, height: 0 },
+      shadowOpacity: isHallOfFame ? 1.0 : 0,
+      shadowRadius: isHallOfFame ? 40 : 0,
+      elevation: isHallOfFame ? 100 : 15,
       }}
     >
       <View className="flex-row justify-between items-center" style={{ marginBottom: 16 * scale }}>
-        <Text 
-          className="font-bold flex-1" 
-          style={{
-            color: colors.secondary,
-            fontSize: teamData.name.length > 20 ? 14 * scale : teamData.name.length > 15 ? 16 * scale : 18 * scale,
-            marginRight: 8 * scale
-          }}
-          numberOfLines={2}
-          adjustsFontSizeToFit={true}
-          minimumFontScale={0.6}
-        >
-          {teamData.name}
-        </Text>
-        <View 
-          className="bg-yellow-400 rounded-full"
-          style={{
-            paddingHorizontal: 12 * scale,
-            paddingVertical: 4 * scale
-          }}
-        >
-          <Text 
-            className="font-bold text-black"
-            style={{ fontSize: 14 * scale }}
-          >
-            #{teamNumber}
-          </Text>
-        </View>
-      </View>
-      
-      <View 
-        className="bg-white rounded-xl shadow-sm"
+      <Text 
+        className="font-bold flex-1" 
         style={{
-          padding: 16 * scale,
-          marginBottom: 16 * scale
+        color: colors.secondary,
+        fontSize: teamData.name.length > 20 ? 14 * scale : teamData.name.length > 15 ? 16 * scale : 18 * scale,
+        marginRight: 8 * scale
         }}
+        numberOfLines={2}
+        adjustsFontSizeToFit={true}
+        minimumFontScale={0.6}
       >
-        <Image
-          source={{
-            uri: imgUrl
-          }}
-          style={{
-            width: imageSize,
-            height: imageSize,
-            alignSelf: 'center'
-          }}
-          resizeMode="contain"
-          onError={() => {
-            setImgUrl('https://upload.wikimedia.org/wikipedia/en/thumb/a/a2/FIRST_Logo.svg/1200px-FIRST_Logo.svg.png');
-                          console.log('Image load error for team', teamNumber);
-                        }}
-        />
-      </View>
-      
+        {teamData.name}
+      </Text>
       <View 
-        className="bg-opacity-10 rounded-xl"
+        className="bg-yellow-400 rounded-full"
         style={{
-          padding: 16 * scale,
-          marginBottom: 40 * scale
+        paddingHorizontal: 12 * scale,
+        paddingVertical: 4 * scale
         }}
       >
         <Text 
-          className="font-bold"
-          style={{
-            color: colors.secondary,
-            fontSize: 18 * scale,
-            marginBottom: 8 * scale
-          }}
+        className="font-bold text-black"
+        style={{ fontSize: 14 * scale }}
         >
-          Team Stats:
+        #{teamNumber}
         </Text>
-        <View className="flex-row justify-between" style={{ marginBottom: 8 * scale }}>
-          <Ionicons name="trophy-outline" size={20 * scale} color={colors.secondary} /> 
-          <Text 
-            className="font-bold"
-            style={{
-              color: colors.secondary,
-              fontSize: 16 * scale
-            }}
-          >
-            x {teamNumber}
-          </Text>
-        </View>
-        <View className="flex-row justify-between" style={{ marginBottom: 8 * scale }}>
-          <Text 
-            className="font-semibold"
-            style={{
-              color: colors.secondary,
-              fontSize: 16 * scale
-            }}
-          >
-            Rookie Year:
-          </Text>
-          <Text 
-            className="font-bold"
-            style={{
-              color: colors.secondary,
-              fontSize: 16 * scale
-            }}
-          >
-            {teamData.rookie_year}
-          </Text>
-        </View>
-        <View className="flex-row justify-between">
-          <Text 
-            className="font-semibold"
-            style={{
-              color: colors.secondary,
-              fontSize: 16 * scale
-            }}
-          >
-            Region:
-          </Text>
-          <Text 
-            className="font-bold"
-            style={{
-              color: colors.secondary,
-              fontSize: 16 * scale
-            }}
-          >
-            {teamData.state_prov}, {teamData.country}
-          </Text>
-        </View>
+      </View>
+      </View>
+      
+      <View 
+      className="bg-white rounded-xl shadow-sm"
+      style={{
+        padding: 16 * scale,
+        marginBottom: 16 * scale
+      }}
+      >
+      <Image
+        source={{
+        uri: imgUrl
+        }}
+        style={{
+        width: imageSize,
+        height: imageSize,
+        alignSelf: 'center'
+        }}
+        resizeMode="contain"
+        onError={() => {
+        setImgUrl('https://upload.wikimedia.org/wikipedia/en/thumb/a/a2/FIRST_Logo.svg/1200px-FIRST_Logo.svg.png');
+                console.log('Image load error for team', teamNumber);
+              }}
+      />
+      </View>
+      
+      <View 
+      className="bg-opacity-10 rounded-xl"
+      style={{
+        padding: 16 * scale,
+        marginBottom: 40 * scale
+      }}
+      >
+      <Text 
+        className="font-bold"
+        style={{
+        color: colors.secondary,
+        fontSize: 18 * scale,
+        marginBottom: 8 * scale
+        }}
+      >
+        Team Stats:
+      </Text>
+      <View className="flex-row justify-between" style={{ marginBottom: 8 * scale }}>
+        <Ionicons name="trophy-outline" size={20 * scale} color={colors.secondary} /> 
+        <Text 
+        className="font-bold"
+        style={{
+          color: colors.secondary,
+          fontSize: 16 * scale
+        }}
+        >
+        x {teamNumber}
+        </Text>
+      </View>
+      <View className="flex-row justify-between" style={{ marginBottom: 8 * scale }}>
+        <Text 
+        className="font-semibold"
+        style={{
+          color: colors.secondary,
+          fontSize: 16 * scale
+        }}
+        >
+        Rookie Year:
+        </Text>
+        <Text 
+        className="font-bold"
+        style={{
+          color: colors.secondary,
+          fontSize: 16 * scale
+        }}
+        >
+        {teamData.rookie_year}
+        </Text>
+      </View>
+      <View className="flex-row justify-between">
+        <Text 
+        className="font-semibold"
+        style={{
+          color: colors.secondary,
+          fontSize: 16 * scale
+        }}
+        >
+        Region:
+        </Text>
+        <Text 
+        className="font-bold"
+        style={{
+          color: colors.secondary,
+          fontSize: 16 * scale
+        }}
+        >
+        {teamData.state_prov}, {teamData.country}
+        </Text>
+      </View>
       </View>
     </View>
   );

@@ -1,6 +1,6 @@
 import { TBA_API_KEY } from "@env";
 import TeamCard from "components/Card";
-import { useState } from "react";
+import { use, useEffect, useState } from "react";
 import { View, Text, TextInput, Alert, ScrollView, TouchableOpacity } from "react-native";
 import { useRouter } from 'expo-router';
 import { doc, getDoc, setDoc } from "firebase/firestore";
@@ -78,6 +78,7 @@ export default function Decks() {
             setRandomCards([]);
         }
     };
+
     
     return (
         <ScrollView className="flex-1 bg-catppuccin-base px-6 py-8">

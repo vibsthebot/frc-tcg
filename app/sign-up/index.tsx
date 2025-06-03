@@ -25,6 +25,8 @@ export default function SignUpScreen() {
                     updateProfile(user, {
                         displayName: displayName
                     });
+                    setUser(user);
+                    console.log("User created:", user);
                     AsyncStorage.setItem('user', JSON.stringify({
                         uid: user.uid,
                         email: user.email,
@@ -33,7 +35,7 @@ export default function SignUpScreen() {
                     try {
                         setDoc(doc(db, "users", user?.email || ""), {
                             email: user?.email,
-                            displayName: user?.displayName || "Anonymous",
+                            displayName: displayName || "Anonymous",
                             xp: 0,
                             cards: [],
                             });
