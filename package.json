@@ -9,9 +9,8 @@
     "lint": "eslint \"**/*.{js,jsx,ts,tsx}\" && prettier -c \"**/*.{js,jsx,ts,tsx,json}\"",
     "format": "eslint \"**/*.{js,jsx,ts,tsx}\" --fix && prettier \"**/*.{js,jsx,ts,tsx,json}\" --write",
     "web": "expo start --web",
-    "build:web": "expo export --platform web --output-dir dist",
     "build": "expo export --platform web --output-dir dist",
-    "vercel-build": "expo export --platform web"
+    "vercel-build": "expo export --platform web --output-dir dist"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "2.1.2",
