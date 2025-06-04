@@ -1,11 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
-import { View, Text, ActivityIndicator, Image, Animated } from 'react-native';
+import { View, Text, ActivityIndicator, Image, Animated, Pressable } from 'react-native';
 import './../global.css';
 import { TBA_API_KEY } from '@env';
 import { Ionicons } from '@expo/vector-icons';
 import { useGlobal } from 'GlobalContext';
 import { StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
 
 
 
@@ -29,8 +30,11 @@ export default function TeamCard({ teamNumber, width = 320 }: TeamCardProps) {
   const [error, setError] = useState<string | null>(null);
   const [imgUrl, setImgUrl] = useState('');
   const [isHallOfFame, setIsHallOfFame] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const [imgError, setImgError] = useState(false);
   const {hallOfFame} = useGlobal();
   const translateX = useRef(new Animated.Value(-1)).current;
+  const router = useRouter();
 
   const scale = width / 320;
   const height = 425 * scale;
@@ -40,13 +44,15 @@ export default function TeamCard({ teamNumber, width = 320 }: TeamCardProps) {
 
   useEffect(() => {
     const loop = () => {
-          translateX.setValue(-1);
-          Animated.timing(translateX, {
-            toValue: 1,
-            duration: 1500,
-            useNativeDriver: true,
-          }).start(() => loop());
-        };
+      if (isHallOfFame && isHovered) {
+        translateX.setValue(-1);
+        Animated.timing(translateX, {
+          toValue: 1,
+          duration: 1500,
+          useNativeDriver: true,
+        }).start(() => loop());
+      }
+    };
     
     
     setImgUrl(`https://www.thebluealliance.com/avatar/2025/frc${teamNumber}.png`);
@@ -102,21 +108,23 @@ export default function TeamCard({ teamNumber, width = 320 }: TeamCardProps) {
     fetchColors();
     fetchTeamName();
     loop();
-  }, [teamNumber]);
+  }, [teamNumber, isHovered]);
 
   const shimmerTranslate = translateX.interpolate({
     inputRange: [-1, 1],
     outputRange: [-0.6 * width, 2 * width],
   });
 
-  if (loading) return <ActivityIndicator size="large" color="#000" />;
+  //if (loading) return <ActivityIndicator size="large" color="#000" />;
   if (error) return <Text className="text-red-600 mb-4 text-center">{error}</Text>;
   if (!colors || !teamData) return null;
 
   return (
     <View>
-    <View 
-      className="bg-white shadow-lg" 
+    <Pressable
+      onHoverIn={() => setIsHovered(true)}
+      onHoverOut={() => setIsHovered(false)}
+      onPress={() => router.push(`/cards/${teamNumber}`)}
       style={{ 
       backgroundColor: colors.primary, 
       borderColor: colors.secondary, 
@@ -135,7 +143,7 @@ export default function TeamCard({ teamNumber, width = 320 }: TeamCardProps) {
       zIndex: 0,
       }}
     >
-      {isHallOfFame && (<Animated.View
+      {isHallOfFame && isHovered && (<Animated.View
               style={[
               StyleSheet.absoluteFillObject,
               { 
@@ -145,7 +153,7 @@ export default function TeamCard({ teamNumber, width = 320 }: TeamCardProps) {
               ]}
             >
               <LinearGradient
-              colors={['rgba(255,215,0,0.4)', 'rgba(255,215,0,0.15)', 'rgba(255,215,0,0.4)']}
+              colors={['rgba(255,215,0,0.15)', 'rgba(255,215,0,0.15)', 'rgba(255,215,0,0.15)']}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
               style={{ width: 30, height: '200%'}}
@@ -204,19 +212,17 @@ export default function TeamCard({ teamNumber, width = 320 }: TeamCardProps) {
       }}
       >
         <Image
-          source={{
-          uri: imgUrl
-          }}
+          source={imgError ? require('../assets/first.png') : { uri: imgUrl }}
           style={{
-          width: imageSize,
-          height: imageSize,
-          alignSelf: 'center',
+            width: imageSize,
+            height: imageSize,
+            alignSelf: 'center',
           }}
           resizeMode="contain"
           onError={() => {
-          setImgUrl('https://upload.wikimedia.org/wikipedia/en/thumb/a/a2/FIRST_Logo.svg/1200px-FIRST_Logo.svg.png');
-                  console.log('Image load error for team', teamNumber);
-                }}
+            setImgError(true);
+            console.log('Image load error for team', teamNumber);
+          }}
         />
       </View>
       
@@ -290,7 +296,7 @@ export default function TeamCard({ teamNumber, width = 320 }: TeamCardProps) {
         </Text>
       </View>
       </View>
-    </View>
+    </Pressable>
     </View>
   );
 }

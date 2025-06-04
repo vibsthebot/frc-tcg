@@ -69,6 +69,24 @@ export default function RootLayout() {
                     ),
                 }}
             />
+            <Tabs.Screen
+                name="shop"
+                options={{
+                    title: 'Shop',
+                    tabBarIcon: ({ color, focused }) => (
+                        <Ionicons name={focused ? 'bag' : 'bag-outline'} size={24} color={color} />
+                    ),
+                }}
+            />
+            <Tabs.Screen
+                name="settings"
+                options={{
+                    title: 'Settings',
+                    tabBarIcon: ({ color, focused }) => (
+                        <Ionicons name={focused ? 'cog' : 'cog-outline'} size={24} color={color} />
+                    ),
+                }}
+            />
         </Tabs>
     );
 }
