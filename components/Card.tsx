@@ -7,6 +7,11 @@ import { useGlobal } from 'GlobalContext';
 import { StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
+import resolveConfig from 'tailwindcss/resolveConfig';
+import tailwindConfig from '../tailwind.config.js';
+import { catppuccin } from 'colors';
+
+const fullConfig = resolveConfig(tailwindConfig);
 
 
 
@@ -161,23 +166,18 @@ export default function TeamCard({ teamNumber, width = 320 }: TeamCardProps) {
           </Animated.View>)}
 
       {isHallOfFame && (
-        <View
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: 'rgba(255, 215, 0, 0.5)',
-            zIndex: 6,
-          }}
-        />
+       <LinearGradient
+        colors={['#FFD700', '#FFA500', '#B8860B', '#DAA520']}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={StyleSheet.absoluteFillObject}
+      />
       )}
       <View className="flex-row justify-between items-center" style={{ marginBottom: 16 * scale }}>
         <Text 
           className="font-bold flex-1" 
           style={{
-          color: colors.secondary,
+          color: isHallOfFame ? catppuccin.crust : colors.secondary,
           fontSize: teamData.name.length > 20 ? 14 * scale : teamData.name.length > 15 ? 16 * scale : 18 * scale,
           marginRight: 8 * scale
           }}
@@ -236,7 +236,7 @@ export default function TeamCard({ teamNumber, width = 320 }: TeamCardProps) {
         <Text 
           className="font-bold"
           style={{
-          color: colors.secondary,
+          color: isHallOfFame ? catppuccin.crust : colors.secondary,
           fontSize: 18 * scale,
           marginBottom: 8 * scale
           }}
@@ -244,11 +244,11 @@ export default function TeamCard({ teamNumber, width = 320 }: TeamCardProps) {
           Team Stats:
         </Text>
       <View className="flex-row justify-between" style={{ marginBottom: 8 * scale }}>
-        <Ionicons name="trophy-outline" size={20 * scale} color={colors.secondary} /> 
+        <Ionicons name="trophy-outline" size={20 * scale} color={isHallOfFame ? catppuccin.crust : colors.secondary} /> 
         <Text 
         className="font-bold"
         style={{
-          color: colors.secondary,
+          color: isHallOfFame ? catppuccin.crust : colors.secondary,
           fontSize: 16 * scale
         }}
         >
@@ -259,7 +259,7 @@ export default function TeamCard({ teamNumber, width = 320 }: TeamCardProps) {
         <Text 
         className="font-semibold"
         style={{
-          color: colors.secondary,
+          color: isHallOfFame ? catppuccin.crust : colors.secondary,
           fontSize: 16 * scale
         }}
         >
@@ -268,7 +268,7 @@ export default function TeamCard({ teamNumber, width = 320 }: TeamCardProps) {
         <Text 
         className="font-bold"
         style={{
-          color: colors.secondary,
+          color: isHallOfFame ? catppuccin.crust : colors.secondary,
           fontSize: 16 * scale
         }}
         >
@@ -279,7 +279,7 @@ export default function TeamCard({ teamNumber, width = 320 }: TeamCardProps) {
         <Text 
         className="font-semibold"
         style={{
-          color: colors.secondary,
+          color: isHallOfFame ? catppuccin.crust : colors.secondary,
           fontSize: 16 * scale
         }}
         >
@@ -288,7 +288,7 @@ export default function TeamCard({ teamNumber, width = 320 }: TeamCardProps) {
         <Text 
         className="font-bold"
         style={{
-          color: colors.secondary,
+          color: isHallOfFame ? catppuccin.crust : colors.secondary,
           fontSize: 16 * scale
         }}
         >
