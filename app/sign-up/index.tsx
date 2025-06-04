@@ -30,7 +30,7 @@ export default function SignUpScreen() {
                     AsyncStorage.setItem('user', JSON.stringify({
                         uid: user.uid,
                         email: user.email,
-                        displayName: user.displayName,
+                        displayName: displayName,
                     }));
                     try {
                         setDoc(doc(db, "users", user?.email || ""), {
